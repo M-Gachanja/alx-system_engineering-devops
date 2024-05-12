@@ -1,7 +1,9 @@
 POSTMORTEM
+
 Around 7AM EAT in Kenya, with the launch of ALX's System Engineering & DevOps project 0x19, an isolated Ubuntu 14.04 container hosting an Apache web server had an outage. When an HTML file establishing a basic Holberton WordPress site was expected as response, GET queries on the server caused 500 Internal Server Errors.
 
 Debugging Process
+
 I encountered the problem when I first opened the project, and after being directed to address it, I set out to solve it. 
 •	Checked running processes using ps aux. Two apache2 processes - root and www-data - were properly running.
 •	Looked in the sites-available folder of the /etc/apache2/ directory. Determined that the web server was serving content located in /var/www/html/.
@@ -13,9 +15,12 @@ I encountered the problem when I first opened the project, and after being direc
 •	Wrote a Puppet manifest to automate fixing of the error.
 
 Summation.
+
 In short, a typo. Gotta love'em. In full, the WordPress app was encountering a critical error in wp-settings.php when tyring to load the file class-wp-locale.phpp. The correct file name, located in the wp-content directory of the application folder, was class-wp-locale.php.
 Patch involved a simple fix on the typo, removing the trailing p.
+
 Prevention
+
 This outage was not a web server error, but an application error. To prevent such outages moving forward, please keep the following in mind.
 •	Test! Test test test. Test the application before deploying. This error would have arisen and could have been addressed earlier had the app been tested.
 •	Status monitoring. Enable some uptime-monitoring service such as UptimeRobot to alert instantly upon outage of the website.
